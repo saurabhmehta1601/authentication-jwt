@@ -1,6 +1,6 @@
 import { Schema, model, Document, Model } from "mongoose";
 import { hash } from "bcryptjs";
-
+import {sign} from "jsonwebtoken"
 interface IUser extends Document {
     name : string;
     email : string;
@@ -16,7 +16,6 @@ const UserSchema : Schema= new Schema({
     type: String,
     required: true,
     unique: true,
-    // match: "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",
   },
   password: {
     type: String,
@@ -24,11 +23,17 @@ const UserSchema : Schema= new Schema({
   },
 });
 
-UserSchema.pre<IUser>("save", async function (next) {
+UserSchema.pre<IUser>("save", async function () {
     if(this.isModified("password")){
         this.password = await hash(this.password,12)
     }
-    next()
 });
+
+// UserSchema.methods.getAccessToken = () =>{
+//     return  sign({id: this?._id || ""},process.env.ACCESS_TOKEN_SECRET || "",{
+//         expiresIn : "1d"
+//     })
+// }
+
 
 export const User : Model<IUser> = model("User", UserSchema);
