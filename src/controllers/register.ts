@@ -1,13 +1,19 @@
 import {Request,Response} from "express"
-import { User, IUser } from "../models/User"
-import bcrypt from "bcryptjs"
+import { User } from "../models/User"
 
+
+interface registerArgs {
+    name:string,
+    email:string,
+    password:string
+} 
 
 export default async (req: Request,res : Response)=>{
-    const {name,email,password } =req.body  
+    const {name,email,password } : registerArgs=req.body  
  
     try{
-        const user : IUser|null  = await User.findOne({email})
+        // finding user by primary key which is here email
+        const user   = await User.findOne({email})
         
         if(user){
             res.status(403).json({
@@ -15,13 +21,11 @@ export default async (req: Request,res : Response)=>{
                 message:"User with entered account already exists "
             })
         }
-        const hashedPassword : string = await bcrypt.hash(password,12) 
-        
+        else{
         await User.create({
-            name,email,password : hashedPassword
-        })
- 
-        res.status(201).json({success:true,message:"user account created"})
+            name,email,password })
+        res.status(201).json({success:true,message:"user account created"})}
+
     }catch(err){
      res.status(500).json({
          success:false,
