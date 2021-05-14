@@ -42,7 +42,7 @@ UserSchema.methods.getAccessToken = function() : string{
   return token 
 }
 
-UserSchema.methods.getRefreshToken = function() : string{
+UserSchema.methods.getRefreshToken = function() : string {
   const token = sign({id: this.id},process.env.REFRESH_TOKEN_SECRET || "",{expiresIn:"6h"})
   
   return token 
