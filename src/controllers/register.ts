@@ -16,14 +16,15 @@ export default async (req: Request,res : Response)=>{
         const user   = await User.findOne({email})
         
         if(user){
-            res.status(403).json({
+            res.status(409).json({
                 success:false,
-                message:"User with entered account already exists "
+                message:"User with this account already exists "
             })
         }
         else{
         await User.create({
-            name,email,password })
+            name,email,password 
+        })
         res.status(201).json({success:true,message:"user account created"})}
 
     }catch(err){
