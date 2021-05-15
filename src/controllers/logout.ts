@@ -2,7 +2,7 @@ import {Request,Response} from "express"
 
 export default async (req: Request,res : Response ) =>{
     // remove refresh token from cookie  
-    res.clearCookie('refresh_token',{
+    res.clearCookie('refreshtoken',{
         path:"/refresh_token"
     })
 

@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 import apiRouter from "./routes/api"
 import connectDB from "./config/connectDb"
+import { protect } from "./middlewares/protectRoute"
 connectDB()
 const PORT  = process.env.PORT || 4000 
 
@@ -20,6 +21,9 @@ app.use(cors({
     origin : "http://localhost:3000",
     credentials:true
 }))
+
+// protecting route
+app.get("/books",protect,(req,res) =>res.send("books"))
 
 
 
