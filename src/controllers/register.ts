@@ -1,5 +1,5 @@
 import {Request,Response} from "express"
-import { User } from "../models/User"
+import { User,IUser } from "../models/User"
 
 
 interface registerArgs {
@@ -13,7 +13,7 @@ export default async (req: Request,res : Response)=>{
  
     try{
         // finding user by primary key which is here email
-        const user   = await User.findOne({email})
+        const user: IUser|null = await User.findOne({email}).exec()
         
         if(user){
             res.status(409).json({

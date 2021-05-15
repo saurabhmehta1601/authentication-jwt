@@ -6,6 +6,7 @@ export interface IUser extends Document {
     name : string;
     email : string;
     password : string;
+    refreshToken? : string ;
     getAccessToken : () => string ;
     getRefreshToken : () => string ;
 }
@@ -27,7 +28,11 @@ const UserSchema : Schema= new Schema({
     type: String,
     required: true,
     trim:true
-  }
+  },
+  refreshToken :{
+    type: String,
+    required: ''
+  },
 });
 
 UserSchema.pre<IUser>("save", async function () {
@@ -42,8 +47,8 @@ UserSchema.methods.getAccessToken = function() : string{
   return token 
 }
 
-UserSchema.methods.getRefreshToken = function() : string {
-  const token = sign({id: this.id},process.env.REFRESH_TOKEN_SECRET || "",{expiresIn:"6h"})
+UserSchema.methods.getRefreshToken = function () : string {
+  const token = sign( {id: this.id} ,process.env.REFRESH_TOKEN_SECRET || "",{expiresIn:"6h"})
   
   return token 
 }

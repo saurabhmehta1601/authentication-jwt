@@ -1,9 +1,9 @@
-import {Request,Response} from "express"
+import { Request,Response } from "express"
 import { User,IUser } from "../models/User"
 import { compare } from "bcryptjs"
 import { sendRefreshToken } from "../utils/sendTokens"
 
-export default async (req :Request,res : Response) => {
+export default async (req : Request ,res : Response) => {
     const {email , password } =req.body
 
     if(!email || !password) 
@@ -18,6 +18,7 @@ export default async (req :Request,res : Response) => {
         const valid : boolean = await compare(password,user.password )
         
         if(valid){
+            
             const accessToken = user.getAccessToken()
             const refreshToken = user.getRefreshToken()
             
